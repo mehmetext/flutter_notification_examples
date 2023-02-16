@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'views/home_view.dart';
+import 'package:local_notification_denemeler/views/splash_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeView(),
+      home: SplashView(),
     );
   }
 }

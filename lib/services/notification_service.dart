@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:local_notification_denemeler/utils/clg.dart';
 
@@ -29,6 +31,18 @@ class NotificationService {
     );
   }
 
+  static Future<void> checkNotificationClicked() async {
+    clg("NotificationService.checkNotificationClicked()");
+    NotificationAppLaunchDetails? details =
+        await localNotifications.getNotificationAppLaunchDetails();
+
+    if (details != null &&
+        details.didNotificationLaunchApp &&
+        details.notificationResponse != null) {
+      onNotificationTapped(details.notificationResponse!);
+    }
+  }
+
   static Future<void> showSimpleNotification() async {
     clg("NotificationService.showSimpleNotification()");
 
@@ -44,11 +58,16 @@ class NotificationService {
       android: androidNotificationDetails,
     );
 
+    Map<String, dynamic> payload = {
+      "type": "sipmle-notification",
+    };
+
     await localNotifications.show(
       0,
       "Başlık",
       "İçerik",
       notificationDetails,
+      payload: jsonEncode(payload),
     );
   }
 
@@ -56,5 +75,11 @@ class NotificationService {
     NotificationResponse notificationResponse,
   ) async {
     clg("NotificationService.onNotificationTapped(${notificationResponse.id})");
+
+    if (notificationResponse.payload != null) {
+      Map<String, dynamic> payload = jsonDecode(notificationResponse.payload!);
+
+      clg("NotificationService.onNotificationTapped(${notificationResponse.id}) => payload = $payload");
+    }
   }
 }
