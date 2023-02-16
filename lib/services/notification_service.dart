@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/route_manager.dart';
 import 'package:local_notification_denemeler/utils/clg.dart';
+import 'package:local_notification_denemeler/views/simple_notification_view.dart';
 
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
@@ -59,7 +62,7 @@ class NotificationService {
     );
 
     Map<String, dynamic> payload = {
-      "type": "sipmle-notification",
+      "type": "simple-notification",
     };
 
     await localNotifications.show(
@@ -80,6 +83,25 @@ class NotificationService {
       Map<String, dynamic> payload = jsonDecode(notificationResponse.payload!);
 
       clg("NotificationService.onNotificationTapped(${notificationResponse.id}) => payload = $payload");
+
+      _selector(
+        type: payload["type"],
+        simpleNotification: () {
+          Get.to(() => SimpleNotificationView());
+        },
+      );
+    }
+  }
+
+  static Future<void> _selector({
+    required String type,
+    void Function()? simpleNotification,
+  }) async {
+    switch (type) {
+      case "simple-notification":
+        if (simpleNotification != null) simpleNotification();
+        break;
+      default:
     }
   }
 }

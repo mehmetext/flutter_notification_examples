@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:local_notification_denemeler/views/home_view.dart';
 
 import '../services/notification_service.dart';
@@ -16,15 +17,10 @@ class _SplashViewState extends State<SplashView> {
     super.initState();
 
     Future.wait([
-      Future.delayed(Duration(seconds: 2)),
+      Future.delayed(Duration(milliseconds: 1500)),
       NotificationService.init(),
     ]).then((value) async {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeView(),
-        ),
-      );
+      Get.off(() => HomeView());
       NotificationService.checkNotificationClicked();
     });
   }
