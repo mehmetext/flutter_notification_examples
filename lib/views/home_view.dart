@@ -22,6 +22,17 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         title: Text("HomeView"),
       ),
+      body: ListView(
+        padding: EdgeInsets.all(10),
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              NotificationService.showSimpleNotification();
+            },
+            child: Text("Simple Notification"),
+          ),
+        ],
+      ),
     );
   }
 }

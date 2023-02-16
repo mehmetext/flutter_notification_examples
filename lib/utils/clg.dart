@@ -2,8 +2,8 @@ import 'dart:developer';
 
 void clg(
   dynamic object, {
-  bool logging = true,
+  bool logging = false,
   String name = "LOCAL-NOTIFICATIONS-DENEMELER",
 }) {
-  logging ? log(object, name: name) : print("{$name} $object");
+  logging ? log(object, name: name) : print("[$name] $object");
 }

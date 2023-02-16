@@ -3,7 +3,9 @@ import 'package:local_notification_denemeler/utils/clg.dart';
 
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
-  clg("notificationTapBackground");
+  clg("notificationTapBackground()");
+
+  NotificationService.onNotificationTapped(notificationResponse);
 }
 
 class NotificationService {
@@ -27,9 +29,32 @@ class NotificationService {
     );
   }
 
+  static Future<void> showSimpleNotification() async {
+    clg("NotificationService.showSimpleNotification()");
+
+    AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+      "simple-notification",
+      "Simple Notification",
+      importance: Importance.max,
+      priority: Priority.max,
+    );
+
+    NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
+
+    await localNotifications.show(
+      0,
+      "Başlık",
+      "İçerik",
+      notificationDetails,
+    );
+  }
+
   static Future<void> onNotificationTapped(
     NotificationResponse notificationResponse,
   ) async {
-    clg("NotificationService.onNotificationTapped()");
+    clg("NotificationService.onNotificationTapped(${notificationResponse.id})");
   }
 }
