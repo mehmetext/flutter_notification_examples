@@ -9,9 +9,15 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  TextEditingController titleController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+
+    titleController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -28,6 +34,22 @@ class _HomeViewState extends State<HomeView> {
               NotificationService.showSimpleNotification();
             },
             child: Text("Simple Notification"),
+          ),
+          TextFormField(
+            controller: titleController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: titleController.text.isNotEmpty
+                ? () {
+                    NotificationService.showSimpleTitleNotification(
+                      titleController.text,
+                    );
+                  }
+                : null,
+            child: Text("Simple Title Notification"),
           ),
         ],
       ),

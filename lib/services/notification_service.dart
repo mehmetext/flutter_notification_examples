@@ -6,6 +6,8 @@ import 'package:get/route_manager.dart';
 import 'package:local_notification_denemeler/utils/clg.dart';
 import 'package:local_notification_denemeler/views/simple_notification_view.dart';
 
+import '../views/simple_title_notification_view.dart';
+
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
   clg("notificationTapBackground()");
@@ -74,6 +76,35 @@ class NotificationService {
     );
   }
 
+  static Future<void> showSimpleTitleNotification(String text) async {
+    clg("NotificationService.showSimpleNotification()");
+
+    AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+      "simple-title-notification",
+      "Simple Title Notification",
+      importance: Importance.max,
+      priority: Priority.max,
+    );
+
+    NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
+
+    Map<String, dynamic> payload = {
+      "type": "simple-title-notification",
+      "title": text,
+    };
+
+    await localNotifications.show(
+      0,
+      "Simple Title Notification",
+      text,
+      notificationDetails,
+      payload: jsonEncode(payload),
+    );
+  }
+
   static Future<void> onNotificationTapped(
     NotificationResponse notificationResponse,
   ) async {
@@ -89,6 +120,13 @@ class NotificationService {
         simpleNotification: () {
           Get.to(() => SimpleNotificationView());
         },
+        simpleTitleNotification: () {
+          Get.to(
+            () => SimpleTitleNotificationView(
+              title: payload["title"],
+            ),
+          );
+        },
       );
     }
   }
@@ -96,10 +134,14 @@ class NotificationService {
   static Future<void> _selector({
     required String type,
     void Function()? simpleNotification,
+    void Function()? simpleTitleNotification,
   }) async {
     switch (type) {
       case "simple-notification":
         if (simpleNotification != null) simpleNotification();
+        break;
+      case "simple-title-notification":
+        if (simpleTitleNotification != null) simpleTitleNotification();
         break;
       default:
     }
