@@ -97,7 +97,7 @@ class NotificationService {
     };
 
     await localNotifications.show(
-      0,
+      1,
       "Simple Title Notification",
       text,
       notificationDetails,
